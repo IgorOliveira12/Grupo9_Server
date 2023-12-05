@@ -3,27 +3,35 @@ package Grupo9_RESTServer;
 import grupo9_FinancasPessoais.Orcamento;
 import grupo9_FinancasPessoais.OrcamentoService;
 
-import javax.persistence.EntityManager;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+/**
+ * Controlador REST para gerenciar orçamentos financeiros.
+ */
 @Path("/orcamento")
 public class OrcamentoRESTService {
 
     private OrcamentoService orcamentoService;
 
-    public OrcamentoRESTService(EntityManager em) {
-        this.orcamentoService = new OrcamentoService(em);
-    }
-
+    /**
+     * Método de saudação em texto simples.
+     *
+     * @return Uma saudação simples em texto.
+     */
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String sayPlainTextHello() {
         return "REST Server: Olá Mundo! Eu sou o Controlador de Orçamentos";
     }
 
+    /**
+     * Obtém a lista de todos os orçamentos.
+     *
+     * @return Resposta HTTP contendo a lista de orçamentos.
+     */
     @GET
     @Path("/getOrcamentos")
     @Produces(MediaType.APPLICATION_JSON)
@@ -41,6 +49,12 @@ public class OrcamentoRESTService {
         }
     }
 
+    /**
+     * Obtém um orçamento com base no valor anual.
+     *
+     * @param valorAnual O valor anual do orçamento a ser obtido.
+     * @return Resposta HTTP contendo o orçamento encontrado ou uma mensagem de erro.
+     */
     @GET
     @Path("/getOrcamento/{valorAnual}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -65,6 +79,12 @@ public class OrcamentoRESTService {
         }
     }
 
+    /**
+     * Adiciona um novo orçamento.
+     *
+     * @param orcamento O orçamento a ser adicionado.
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
     @POST
     @Path("/addOrcamento")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -85,6 +105,12 @@ public class OrcamentoRESTService {
         }
     }
 
+    /**
+     * Atualiza um orçamento existente.
+     *
+     * @param orcamento O orçamento atualizado.
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
     @PUT
     @Path("/updateOrcamento")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -105,6 +131,12 @@ public class OrcamentoRESTService {
         }
     }
 
+    /**
+     * Adiciona ou reduz o valor de um orçamento.
+     *
+     * @param valorAlteracao O valor a ser adicionado ou reduzido no orçamento.
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
     @PUT
     @Path("/adicionarOuReduzirValorOrcamento/{valorAlteracao}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -122,6 +154,11 @@ public class OrcamentoRESTService {
         }
     }
 
+    /**
+     * Obtém o último orçamento.
+     *
+     * @return Resposta HTTP contendo o último orçamento ou uma mensagem de erro.
+     */
     @GET
     @Path("/obterUltimoOrcamento")
     @Produces(MediaType.APPLICATION_JSON)
@@ -146,13 +183,19 @@ public class OrcamentoRESTService {
         }
     }
 
+    /**
+     * Remove um orçamento com base no valor anual.
+     *
+     * @param valorAnual O valor anual do orçamento a ser removido.
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
     @DELETE
     @Path("/removeOrcamento/{valorAnual}")
     public Response removeOrcamento(@PathParam("valorAnual") double valorAnual) {
         try {
             orcamentoService.removeOrcamento(valorAnual);
             return Response.status(Response.Status.OK)
-                    .entity("Orcamento removido.")
+                    .entity("Orçamento removido.")
                     .build();
         } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -162,6 +205,11 @@ public class OrcamentoRESTService {
         }
     }
 
+    /**
+     * Imprime o histórico de orçamentos.
+     *
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
     @GET
     @Path("/imprimirHistoricoOrcamentos")
     @Produces(MediaType.APPLICATION_JSON)
@@ -179,6 +227,12 @@ public class OrcamentoRESTService {
         }
     }
 
+    /**
+     * Calcula o gasto realizado com base no valor anual do orçamento.
+     *
+     * @param valorAnual O valor anual do orçamento.
+     * @return Resposta HTTP contendo o gasto realizado ou uma mensagem de erro.
+     */
     @GET
     @Path("/calcularGastoRealizado/{valorAnual}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -204,6 +258,11 @@ public class OrcamentoRESTService {
         }
     }
 
+    /**
+     * Mostra o status do orçamento.
+     *
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
     @GET
     @Path("/mostrarStatusOrcamento")
     @Produces(MediaType.APPLICATION_JSON)

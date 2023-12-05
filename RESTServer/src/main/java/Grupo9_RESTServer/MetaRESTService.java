@@ -3,27 +3,35 @@ package Grupo9_RESTServer;
 import grupo9_FinancasPessoais.Meta;
 import grupo9_FinancasPessoais.MetaService;
 
-import javax.persistence.EntityManager;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+/**
+ * Controlador REST para gerenciar metas financeiras.
+ */
 @Path("/meta")
 public class MetaRESTService {
 
     private MetaService metaService;
 
-    public MetaRESTService(EntityManager em) {
-        this.metaService = new MetaService(em);
-    }
-
+    /**
+     * Método de saudação em texto simples.
+     *
+     * @return Uma saudação simples em texto.
+     */
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String sayPlainTextHello() {
         return "REST Server: Olá Mundo! Eu sou o Controlador de Metas";
     }
 
+    /**
+     * Obtém a lista de todas as metas.
+     *
+     * @return Resposta HTTP contendo a lista de metas.
+     */
     @GET
     @Path("/getMetas")
     @Produces(MediaType.APPLICATION_JSON)
@@ -41,6 +49,12 @@ public class MetaRESTService {
         }
     }
 
+    /**
+     * Obtém uma meta com base no nome.
+     *
+     * @param nome O nome da meta a ser obtida.
+     * @return Resposta HTTP contendo a meta encontrada ou uma mensagem de erro.
+     */
     @GET
     @Path("/getMeta/{nome}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -65,6 +79,12 @@ public class MetaRESTService {
         }
     }
 
+    /**
+     * Adiciona uma nova meta.
+     *
+     * @param meta A meta a ser adicionada.
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
     @POST
     @Path("/addMeta")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -84,6 +104,12 @@ public class MetaRESTService {
         }
     }
 
+    /**
+     * Atualiza uma meta existente.
+     *
+     * @param meta A meta atualizada.
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
     @PUT
     @Path("/updateMeta")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -103,6 +129,13 @@ public class MetaRESTService {
         }
     }
 
+    /**
+     * Altera o valor de uma meta.
+     *
+     * @param nome      O nome da meta a ter o valor alterado.
+     * @param novoValor O novo valor da meta.
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
     @PUT
     @Path("/alterarValorMeta/{nome}/{novoValor}")
     @Produces(MediaType.TEXT_PLAIN)
@@ -121,6 +154,13 @@ public class MetaRESTService {
         }
     }
 
+    /**
+     * Altera o prazo de uma meta.
+     *
+     * @param nome      O nome da meta a ter o prazo alterado.
+     * @param novaData  A nova data de prazo da meta.
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
     @PUT
     @Path("/alterarPrazoMeta/{nome}/{novaData}")
     @Produces(MediaType.TEXT_PLAIN)
@@ -139,6 +179,11 @@ public class MetaRESTService {
         }
     }
 
+    /**
+     * Verifica as metas cumpridas.
+     *
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
     @GET
     @Path("/verificarMetasCumpridas")
     @Produces(MediaType.APPLICATION_JSON)
@@ -156,6 +201,11 @@ public class MetaRESTService {
         }
     }
 
+    /**
+     * Lista as metas não cumpridas.
+     *
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
     @GET
     @Path("/listarMetasNaoCumpridas")
     @Produces(MediaType.APPLICATION_JSON)

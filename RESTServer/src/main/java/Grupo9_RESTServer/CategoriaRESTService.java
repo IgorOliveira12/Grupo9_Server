@@ -2,7 +2,6 @@ package Grupo9_RESTServer;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -10,27 +9,36 @@ import javax.ws.rs.core.Response;
 import grupo9_FinancasPessoais.Categoria;
 import grupo9_FinancasPessoais.CategoriaService;
 
+/**
+ * Controlador REST para gerenciar categorias financeiras.
+ */
 @Path("/categoria")
 public class CategoriaRESTService {
 
-    private CategoriaService categoriaService;
+    private CategoriaService cs;
 
-    public CategoriaRESTService(EntityManager em) {
-        this.categoriaService = new CategoriaService(em);
-    }
-
+    /**
+     * Método de saudação em texto simples.
+     *
+     * @return Uma saudação simples em texto.
+     */
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String sayPlainTextHello() {
         return "REST Server: Olá Mundo! Eu sou o Controlador de Categorias";
     }
 
+    /**
+     * Obtém a lista de todas as categorias.
+     *
+     * @return Resposta HTTP contendo a lista de categorias.
+     */
     @GET
     @Path("/getCategorias")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCategorias() {
         try {
-            List<Categoria> categorias = categoriaService.findAllCategorias();
+            List<Categoria> categorias = cs.findAllCategorias();
             return Response.status(Response.Status.OK)
                     .entity(categorias)
                     .build();
@@ -42,12 +50,18 @@ public class CategoriaRESTService {
         }
     }
 
+    /**
+     * Obtém uma categoria com base no nome.
+     *
+     * @param nomeC O nome da categoria a ser obtida.
+     * @return Resposta HTTP contendo a categoria encontrada ou uma mensagem de erro.
+     */
     @GET
     @Path("/getCategoria/{nomeC}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCategoria(@PathParam("nomeC") String nomeC) {
         try {
-            Categoria categoriaResponse = categoriaService.findCategoria(nomeC);
+            Categoria categoriaResponse = cs.findCategoria(nomeC);
             if (categoriaResponse != null) {
                 return Response.status(Response.Status.OK)
                         .entity(categoriaResponse)
@@ -66,13 +80,19 @@ public class CategoriaRESTService {
         }
     }
 
+    /**
+     * Adiciona uma nova categoria.
+     *
+     * @param categoria A categoria a ser adicionada.
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
     @POST
     @Path("/addCategoria")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addCategoria(Categoria categoria) {
         try {
-            Categoria categoriaResponse = categoriaService.updateCategoria(
+            Categoria categoriaResponse = cs.updateCategoria(
                     categoria.getNomeC(), categoria.getGastoMaximo());
             return Response.status(Response.Status.CREATED)
                     .entity(categoriaResponse)
@@ -90,13 +110,19 @@ public class CategoriaRESTService {
         }
     }
 
-    @PUT
+    /**
+     * Atualiza uma categoria existente.
+     *
+     * @param categoria A categoria atualizada.
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
+    @POST
     @Path("/updateCategoria")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateCategoria(Categoria categoria) {
         try {
-            Categoria categoriaResponse = categoriaService.updateCategoria(
+            Categoria categoriaResponse = cs.updateCategoria(
                     categoria.getNomeC(), categoria.getGastoMaximo(),
                     categoria.getListaTransacoes(), categoria.getListaSubcategoria());
             return Response.status(Response.Status.OK)
@@ -115,9 +141,17 @@ public class CategoriaRESTService {
         }
     }
 
+    /**
+     * Visualiza a percentagem de gastos por categoria no último orçamento.
+     *
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
+    @PUT
+    @Path("/visualizarPercentagemGastosPorCategoriaNoOrcamento")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response visualizarPercentagemGastosPorCategoriaNoOrcamento() {
         try {
-            categoriaService.visualizarPercentagemGastosPorCategoriaNoOrcamento();
+            cs.visualizarPercentagemGastosPorCategoriaNoOrcamento();
             return Response.status(Response.Status.OK)
                     .entity("Percentagem de gastos por categoria no último orçamento visualizada.")
                     .build();
@@ -128,14 +162,21 @@ public class CategoriaRESTService {
                     .build();
         }
     }
-    
+
+    /**
+     * Altera o gasto máximo de uma categoria.
+     *
+     * @param nomeC      O nome da categoria a ter o gasto máximo alterado.
+     * @param gastoMaximo O novo valor do gasto máximo.
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
     @PUT
     @Path("/alterarGastoMaximoCategoria/{nomeC}/{gastoMaximo}")
     @Produces(MediaType.TEXT_PLAIN)
     public Response alterarGastoMaximoCategoria(
             @PathParam("nomeC") String nomeC, @PathParam("gastoMaximo") Double gastoMaximo) {
         try {
-            categoriaService.alterarGastoMaximoCategoria(nomeC, gastoMaximo);
+            cs.alterarGastoMaximoCategoria(nomeC, gastoMaximo);
             return Response.status(Response.Status.OK)
                     .entity("Valor máximo da Categoria " + nomeC + " alterado para: " + gastoMaximo)
                     .build();

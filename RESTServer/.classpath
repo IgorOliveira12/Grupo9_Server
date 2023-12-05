@@ -163,11 +163,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/gabri/Desktop/RESTServer/gson/gson-2.10.1.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/Grupo9_FinancasPessoais"/>
+	<classpathentry kind="lib" path="gson/gson-2.10.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

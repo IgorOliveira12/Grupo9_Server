@@ -3,27 +3,35 @@ package Grupo9_RESTServer;
 import grupo9_FinancasPessoais.Subcategoria;
 import grupo9_FinancasPessoais.SubcategoriaService;
 
-import javax.persistence.EntityManager;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+/**
+ * Controlador REST para gerenciar subcategorias de gastos.
+ */
 @Path("/subcategoria")
 public class SubcategoriaRESTService {
 
     private SubcategoriaService subcategoriaService;
 
-    public SubcategoriaRESTService(EntityManager em) {
-        this.subcategoriaService = new SubcategoriaService(em);
-    }
-
+    /**
+     * Método de saudação em texto simples.
+     *
+     * @return Uma saudação simples em texto.
+     */
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String sayPlainTextHello() {
         return "REST Server: Olá Mundo! Eu sou o Controlador de Subcategorias";
     }
 
+    /**
+     * Obtém a lista de todas as subcategorias.
+     *
+     * @return Resposta HTTP contendo a lista de subcategorias.
+     */
     @GET
     @Path("/getSubcategorias")
     @Produces(MediaType.APPLICATION_JSON)
@@ -41,6 +49,12 @@ public class SubcategoriaRESTService {
         }
     }
 
+    /**
+     * Obtém uma subcategoria com base no nome.
+     *
+     * @param nomeSubc O nome da subcategoria a ser obtida.
+     * @return Resposta HTTP contendo a subcategoria encontrada ou uma mensagem de erro.
+     */
     @GET
     @Path("/getSubcategoria/{nomeSubc}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -65,6 +79,12 @@ public class SubcategoriaRESTService {
         }
     }
 
+    /**
+     * Adiciona uma nova subcategoria.
+     *
+     * @param subcategoria A subcategoria a ser adicionada.
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
     @POST
     @Path("/addSubcategoria")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -85,6 +105,12 @@ public class SubcategoriaRESTService {
         }
     }
 
+    /**
+     * Atualiza uma subcategoria existente.
+     *
+     * @param subcategoria A subcategoria atualizada.
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
     @PUT
     @Path("/updateSubcategoria")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -105,6 +131,13 @@ public class SubcategoriaRESTService {
         }
     }
 
+    /**
+     * Altera o gasto máximo de uma subcategoria.
+     *
+     * @param nomeSubc    O nome da subcategoria.
+     * @param gastoMaximo O novo gasto máximo.
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
     @PUT
     @Path("/alterarGastoMaximo/{nomeSubc}/{gastoMaximo}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -123,6 +156,12 @@ public class SubcategoriaRESTService {
         }
     }
 
+    /**
+     * Remove uma subcategoria com base no nome.
+     *
+     * @param nomeSubc O nome da subcategoria a ser removida.
+     * @return Resposta HTTP indicando o resultado da operação.
+     */
     @DELETE
     @Path("/removeSubcategoria/{nomeSubc}")
     public Response removeSubcategoria(@PathParam("nomeSubc") String nomeSubc) {
@@ -139,6 +178,13 @@ public class SubcategoriaRESTService {
         }
     }
 
+    /**
+     * Calcula a percentagem de gastos de uma subcategoria em relação aos gastos totais da categoria.
+     *
+     * @param nomeSubc          O nome da subcategoria.
+     * @param gastosCategoria   O total de gastos da categoria.
+     * @return Resposta HTTP contendo a percentagem calculada ou uma mensagem de erro.
+     */
     @GET
     @Path("/calcularPercentagemGastos/{nomeSubc}/{gastosCategoria}")
     @Produces(MediaType.APPLICATION_JSON)
