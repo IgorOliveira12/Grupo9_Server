@@ -3,6 +3,7 @@
 	<name>RESTServer2</name>
 	<comment></comment>
 	<projects>
+		<project>Grupo9_FinancasPessoais2</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

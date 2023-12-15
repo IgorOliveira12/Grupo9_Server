@@ -218,6 +218,8 @@ public class TransacaoRESTService {
      * @param novaData  A nova data a ser atribuída à transação.
      * @return Resposta HTTP indicando o resultado da operação.
      */
+    
+    /**
     @PUT
     @Path("/alterarData/{descricao}/{novaData}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -236,4 +238,5 @@ public class TransacaoRESTService {
                     .build();
         }
     }
+    */
 }
