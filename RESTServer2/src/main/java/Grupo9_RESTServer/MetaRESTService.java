@@ -1,5 +1,6 @@
 package Grupo9_RESTServer;
 
+import grupo9_FinancasPessoais.Categoria;
 import grupo9_FinancasPessoais.Meta;
 import grupo9_FinancasPessoais.MetaService;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @Path("/meta")
 public class MetaRESTService {
 
-    private MetaService metaService;
+    private MetaService ms = new MetaService();
 
     /**
      * Método de saudação em texto simples.
@@ -27,40 +28,59 @@ public class MetaRESTService {
         return "REST Server: Olá Mundo! Eu sou o Controlador de Metas";
     }
 
+
+    @POST
+	@Path("/addMeta")
+	public Response addCategoria(Meta meta) {		
+    	Meta metaResponse = ms.updateMeta(meta.getDescricao(), meta.getValor(), meta.getData(), meta.getNome());
+		
+		return Response.status(Response.Status.CREATED)
+				.entity(metaResponse)
+				.type(MediaType.APPLICATION_JSON)
+				.build();
+	}
+    
+    @DELETE
+	@Path("/deleteMeta/{nome}")
+	public Response deleteMeta(@PathParam("nome") String nome) {
+		boolean metaRemoved = ms.removeMeta(nome);
+		
+		return Response.status(Response.Status.OK)
+				.entity(metaRemoved)
+				.type(MediaType.APPLICATION_JSON)
+				.build();
+	}
+
     /**
-     * Obtém a lista de todas as metas.
+     * Obtém a lista de todas as categorias.
      *
-     * @return Resposta HTTP contendo a lista de metas.
+     * @return Resposta HTTP contendo a lista de categorias.
      */
     @GET
     @Path("/getMetas")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMetas() {
-        try {
-            List<Meta> metas = metaService.findAllMetas();
-            return Response.status(Response.Status.OK)
-                    .entity(metas)
-                    .build();
-        } catch (RuntimeException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao obter as metas: " + e.getMessage())
-                    .type(MediaType.TEXT_PLAIN)
-                    .build();
-        }
-    }
+    	List<Meta> metas = ms.findAllMetas();
+
+		return Response.status(Response.Status.OK)
+				.entity(metas)
+				.type(MediaType.APPLICATION_JSON)
+				.build();
+	}
+    
 
     /**
-     * Obtém uma meta com base no nome.
+     * Obtém uma categoria com base no nome.
      *
-     * @param nome O nome da meta a ser obtida.
-     * @return Resposta HTTP contendo a meta encontrada ou uma mensagem de erro.
+     * @param nomeC O nome da categoria a ser obtida.
+     * @return Resposta HTTP contendo a categoria encontrada ou uma mensagem de erro.
      */
     @GET
     @Path("/getMeta/{nome}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMeta(@PathParam("nome") String nome) {
         try {
-            Meta metaResponse = metaService.findMeta(nome);
+        	Meta metaResponse = ms.findMeta(nome);
             if (metaResponse != null) {
                 return Response.status(Response.Status.OK)
                         .entity(metaResponse)
@@ -79,55 +99,6 @@ public class MetaRESTService {
         }
     }
 
-    /**
-     * Adiciona uma nova meta.
-     *
-     * @param meta A meta a ser adicionada.
-     * @return Resposta HTTP indicando o resultado da operação.
-     */
-    @POST
-    @Path("/addMeta")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response addMeta(Meta meta) {
-        try {
-            Meta metaResponse = metaService.updateMeta(
-                    meta.getDescricao(), meta.getValor(), meta.getData(), meta.getNome());
-            return Response.status(Response.Status.CREATED)
-                    .entity(metaResponse)
-                    .build();
-        } catch (RuntimeException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao adicionar a meta: " + e.getMessage())
-                    .type(MediaType.TEXT_PLAIN)
-                    .build();
-        }
-    }
-
-    /**
-     * Atualiza uma meta existente.
-     *
-     * @param meta A meta atualizada.
-     * @return Resposta HTTP indicando o resultado da operação.
-     */
-    @PUT
-    @Path("/updateMeta")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateMeta(Meta meta) {
-        try {
-            Meta metaResponse = metaService.updateMeta(
-                    meta.getDescricao(), meta.getValor(), meta.getData(), meta.getNome());
-            return Response.status(Response.Status.OK)
-                    .entity(metaResponse)
-                    .build();
-        } catch (RuntimeException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao atualizar a meta: " + e.getMessage())
-                    .type(MediaType.TEXT_PLAIN)
-                    .build();
-        }
-    }
 
     /**
      * Altera o valor de uma meta.
@@ -142,7 +113,7 @@ public class MetaRESTService {
     public Response alterarValorMeta(
             @PathParam("nome") String nome, @PathParam("novoValor") Double novoValor) {
         try {
-            metaService.alterarValorMeta(nome, novoValor);
+            ms.alterarValorMeta(nome, novoValor);
             return Response.status(Response.Status.OK)
                     .entity("Valor da Meta " + nome + " alterado para: " + novoValor)
                     .build();
@@ -167,7 +138,7 @@ public class MetaRESTService {
     public Response alterarPrazoMeta(
             @PathParam("nome") String nome, @PathParam("novaData") String novaData) {
         try {
-            metaService.alterarPrazoMeta(nome, novaData);
+            ms.alterarPrazoMeta(nome, novaData);
             return Response.status(Response.Status.OK)
                     .entity("Prazo da Meta " + nome + " alterado para: " + novaData)
                     .build();
@@ -189,7 +160,7 @@ public class MetaRESTService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response verificarMetasCumpridas() {
         try {
-            metaService.verificarMetasCumpridas();
+            ms.verificarMetasCumpridas();
             return Response.status(Response.Status.OK)
                     .entity("Metas cumpridas verificadas.")
                     .build();
@@ -211,7 +182,7 @@ public class MetaRESTService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response listarMetasNaoCumpridas() {
         try {
-            metaService.listarMetasNaoCumpridas();
+            ms.listarMetasNaoCumpridas();
             return Response.status(Response.Status.OK)
                     .entity("Metas não cumpridas listadas.")
                     .build();

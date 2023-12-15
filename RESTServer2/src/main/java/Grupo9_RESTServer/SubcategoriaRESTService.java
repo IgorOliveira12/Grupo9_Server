@@ -37,18 +37,13 @@ public class SubcategoriaRESTService {
     @Path("/getSubcategorias")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSubcategorias() {
-        try {
-            List<Subcategoria> subcategorias = ss.findAllSubcategorias();
-            return Response.status(Response.Status.OK)
-                    .entity(subcategorias)
-                    .build();
-        } catch (RuntimeException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao obter as subcategorias: " + e.getMessage())
-                    .type(MediaType.TEXT_PLAIN)
-                    .build();
-        }
-    }
+    	List<Subcategoria> subcategorias = ss.findAllSubcategorias();
+
+		return Response.status(Response.Status.OK)
+				.entity(subcategorias)
+				.type(MediaType.APPLICATION_JSON)
+				.build();
+	}
 
     /**
      * Obtém uma subcategoria com base no nome.

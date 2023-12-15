@@ -17,7 +17,7 @@ import java.util.List;
 @Path("/transacao")
 public class TransacaoRESTService {
 
-    private TransacaoService transacaoService;
+    private TransacaoService ts = new TransacaoService();
 
     /**
      * Método de saudação em texto simples.
@@ -40,7 +40,7 @@ public class TransacaoRESTService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTransacoes() {
         try {
-            List<Transacao> transacoes = transacaoService.findAllTransacoes();
+            List<Transacao> transacoes = ts.findAllTransacoes();
             return Response.status(Response.Status.OK)
                     .entity(transacoes)
                     .build();
@@ -63,7 +63,7 @@ public class TransacaoRESTService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTransacao(@PathParam("descricao") String descricao) {
         try {
-            Transacao transacaoResponse = transacaoService.findTransacao(descricao);
+            Transacao transacaoResponse = ts.findTransacao(descricao);
             if (transacaoResponse != null) {
                 return Response.status(Response.Status.OK)
                         .entity(transacaoResponse)
@@ -89,23 +89,15 @@ public class TransacaoRESTService {
      * @return Resposta HTTP indicando o resultado da operação.
      */
     @POST
-    @Path("/addTransacao")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response addTransacao(Transacao transacao) {
-        try {
-            Transacao transacaoResponse = transacaoService.updateTransacao(
-                    transacao.getData(), transacao.getValor(), transacao.getDescricao());
-            return Response.status(Response.Status.CREATED)
-                    .entity(transacaoResponse)
-                    .build();
-        } catch (RuntimeException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao adicionar a transação: " + e.getMessage())
-                    .type(MediaType.TEXT_PLAIN)
-                    .build();
-        }
-    }
+	@Path("/addTransacao")
+	public Response addCategoria(Transacao transacao) {		
+		Transacao transacaoResponse = ts.updateTransacao(transacao);
+		
+		return Response.status(Response.Status.CREATED)
+				.entity(transacaoResponse)
+				.type(MediaType.APPLICATION_JSON)
+				.build();
+	}
 
     /**
      * Atualiza uma transação existente.
@@ -113,24 +105,6 @@ public class TransacaoRESTService {
      * @param transacao A transação atualizada.
      * @return Resposta HTTP indicando o resultado da operação.
      */
-    @PUT
-    @Path("/updateTransacao")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateTransacao(Transacao transacao) {
-        try {
-            Transacao transacaoResponse = transacaoService.updateTransacao(
-                    transacao.getData(), transacao.getValor(), transacao.getDescricao());
-            return Response.status(Response.Status.OK)
-                    .entity(transacaoResponse)
-                    .build();
-        } catch (RuntimeException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao atualizar a transação: " + e.getMessage())
-                    .type(MediaType.TEXT_PLAIN)
-                    .build();
-        }
-    }
 
     /**
      * Remove uma transação com base na descrição.
@@ -139,22 +113,15 @@ public class TransacaoRESTService {
      * @return Resposta HTTP indicando o resultado da operação.
      */
     @DELETE
-    @Path("/removeTransacao/{descricao}")
-    public Response removeTransacao(@PathParam("descricao") String descricao) {
-        try {
-            Transacao transacao = transacaoService.findTransacao(descricao);
-            transacaoService.removeTransacao(transacao);
-            return Response.status(Response.Status.OK)
-                    .entity("Transação removida.")
-                    .build();
-        } catch (RuntimeException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao remover a transação: " + e.getMessage())
-                    .type(MediaType.TEXT_PLAIN)
-                    .build();
-        }
-    }
-
+	@Path("/deleteTransacao/{descricao}")
+	public Response deleteTransacao(@PathParam("descricao") String descricao) {
+		boolean transacaoRemoved = ts.removeTransacao(ts.findTransacao(descricao));
+		
+		return Response.status(Response.Status.OK)
+				.entity(transacaoRemoved)
+				.type(MediaType.APPLICATION_JSON)
+				.build();
+	}
     /**
      * Altera a categoria de uma transação existente.
      *
@@ -168,10 +135,10 @@ public class TransacaoRESTService {
     public Response alterarCategoria(@PathParam("descricao") String descricao,
                                      @PathParam("novaCategoria") String novaCategoria) {
         try {
-            Transacao transacao = transacaoService.findTransacao(descricao);
+            Transacao transacao = ts.findTransacao(descricao);
             Categoria categoria = new Categoria();
             categoria.setNomeC(novaCategoria);
-            transacaoService.alterarCategoriaTransacao(transacao, categoria);
+            ts.alterarCategoriaTransacao(transacao, categoria);
             return Response.status(Response.Status.OK)
                     .entity("Categoria da transação alterada.")
                     .build();
@@ -196,10 +163,10 @@ public class TransacaoRESTService {
     public Response alterarSubcategoria(@PathParam("descricao") String descricao,
                                         @PathParam("novaSubcategoria") String novaSubcategoria) {
         try {
-            Transacao transacao = transacaoService.findTransacao(descricao);
+            Transacao transacao = ts.findTransacao(descricao);
             Subcategoria subcategoria = new Subcategoria();
             subcategoria.setNomeSubc(novaSubcategoria);
-            transacaoService.alterarSubcategoriaTransacao(transacao, subcategoria);
+            ts.alterarSubcategoriaTransacao(transacao, subcategoria);
             return Response.status(Response.Status.OK)
                     .entity("Subcategoria da transação alterada.")
                     .build();
