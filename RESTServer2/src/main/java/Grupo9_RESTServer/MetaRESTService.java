@@ -32,7 +32,7 @@ public class MetaRESTService {
     @POST
 	@Path("/addMeta")
 	public Response addCategoria(Meta meta) {		
-    	Meta metaResponse = ms.updateMeta(meta.getDescricao(), meta.getValor(), meta.getData(), meta.getNome());
+    	Meta metaResponse = ms.updateMeta(meta.getNome(), meta.getDescricao(), meta.getValor(), meta.getData());
 		
 		return Response.status(Response.Status.CREATED)
 				.entity(metaResponse)

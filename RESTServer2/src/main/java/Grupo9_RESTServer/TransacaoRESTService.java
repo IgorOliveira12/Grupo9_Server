@@ -91,7 +91,7 @@ public class TransacaoRESTService {
     @POST
 	@Path("/addTransacao")
 	public Response addCategoria(Transacao transacao) {		
-		Transacao transacaoResponse = ts.updateTransacao(transacao);
+		Transacao transacaoResponse = ts.updateTransacao(transacao.getData(), transacao.getValor(), transacao.getDescricao());
 		
 		return Response.status(Response.Status.CREATED)
 				.entity(transacaoResponse)

@@ -85,7 +85,7 @@ public class SubcategoriaRESTService {
     @Path("/addSubcategoria")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addSubcategoria(Subcategoria subcategoria, @FormParam("nomeC") String nomeC) {
-        Subcategoria subcategoriaResponse = ss.updateSubcategoria(subcategoria, nomeC);
+        Subcategoria subcategoriaResponse = ss.updateSubcategoria(subcategoria.getNomeSubc(), subcategoria.getGastoMaxSubc());
         
         return Response.status(Response.Status.CREATED)
                 .entity(subcategoriaResponse)

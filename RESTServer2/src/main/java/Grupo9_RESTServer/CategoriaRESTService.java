@@ -37,7 +37,7 @@ public class CategoriaRESTService {
     @POST
 	@Path("/addCategoria")
 	public Response addCategoria(Categoria categoria) {		
-		Categoria categoriaResponse = cs.updateCategoria(categoria);
+		Categoria categoriaResponse = cs.updateCategoria(categoria.getNomeC(), categoria.getGastoMaximo());
 		
 		return Response.status(Response.Status.CREATED)
 				.entity(categoriaResponse)
@@ -82,27 +82,14 @@ public class CategoriaRESTService {
      */
     @GET
     @Path("/getCategoria/{nomeC}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getCategoria(@PathParam("nomeC") String nomeC) {
-        try {
-            Categoria categoriaResponse = cs.findCategoria(nomeC);
-            if (categoriaResponse != null) {
-                return Response.status(Response.Status.OK)
-                        .entity(categoriaResponse)
-                        .build();
-            } else {
-                return Response.status(Response.Status.NOT_FOUND)
-                        .entity("Categoria não encontrada.")
-                        .type(MediaType.TEXT_PLAIN)
-                        .build();
-            }
-        } catch (RuntimeException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao obter a categoria: " + e.getMessage())
-                    .type(MediaType.TEXT_PLAIN)
-                    .build();
-        }
-    }
+		Categoria categoriaResponse = cs.findCategoria(nomeC);
+		
+		return Response.status(Response.Status.OK)
+				.entity(categoriaResponse)
+				.type(MediaType.APPLICATION_JSON)
+				.build();
+	}
 
 
     /**
@@ -135,14 +122,14 @@ public class CategoriaRESTService {
      * @return Resposta HTTP indicando o resultado da operação.
      */
     @PUT
-    @Path("/alterarGastoMaximoCategoria/{nomeC}/{gastoMaximo}")
+    @Path("/alterarGastoMaximo/{nomeCategoria}/{gastoMaximo}")
     @Produces(MediaType.TEXT_PLAIN)
     public Response alterarGastoMaximoCategoria(
-            @PathParam("nomeC") String nomeC, @PathParam("gastoMaximo") Double gastoMaximo) {
+            @PathParam("nomeCategoria") String nomeCategoria, @PathParam("gastoMaximo") Double gastoMaximo) {
         try {
-            cs.alterarGastoMaximoCategoria(nomeC, gastoMaximo);
+            cs.alterarGastoMaximoCategoria(nomeCategoria, gastoMaximo);
             return Response.status(Response.Status.OK)
-                    .entity("Valor máximo da Categoria " + nomeC + " alterado para: " + gastoMaximo)
+                    .entity("Valor máximo da Categoria " + nomeCategoria + " alterado para: " + gastoMaximo)
                     .build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST)

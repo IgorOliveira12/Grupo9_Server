@@ -33,7 +33,7 @@ public class OrcamentoRESTService {
     @POST
 	@Path("/addOrcamento")
 	public Response addCategoria(Orcamento orcamento) {		
-		Orcamento orcamentoResponse = os.updateOrcamento(orcamento);
+		Orcamento orcamentoResponse = os.updateOrcamento(orcamento.getDataCriacao(), orcamento.getValorAnual());
 		
 		return Response.status(Response.Status.CREATED)
 				.entity(orcamentoResponse)
@@ -84,11 +84,11 @@ public class OrcamentoRESTService {
      * @return Resposta HTTP contendo o orçamento encontrado ou uma mensagem de erro.
      */
     @GET
-    @Path("/getOrcamento/{valorAnual}")
+    @Path("/getOrcamento/{dataCriacao}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getOrcamento(@PathParam("valorAnual") double valorAnual) {
+    public Response getOrcamento(@PathParam("valorAnual") String dataCriacao) {
         try {
-            Orcamento orcamentoResponse = os.findOrcamento(valorAnual);
+            Orcamento orcamentoResponse = os.findOrcamento(dataCriacao);
             if (orcamentoResponse != null) {
                 return Response.status(Response.Status.OK)
                         .entity(orcamentoResponse)
@@ -188,11 +188,11 @@ public class OrcamentoRESTService {
      * @return Resposta HTTP contendo o gasto realizado ou uma mensagem de erro.
      */
     @GET
-    @Path("/calcularGastoRealizado/{valorAnual}")
+    @Path("/calcularGastoRealizado/{dataCriacao}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response calcularGastoRealizado(@PathParam("valorAnual") double valorAnual) {
+    public Response calcularGastoRealizado(@PathParam("valorAnual") String dataCriacao) {
         try {
-            Orcamento orcamentoResponse = os.findOrcamento(valorAnual);
+            Orcamento orcamentoResponse = os.findOrcamento(dataCriacao);
             if (orcamentoResponse != null) {
                 double gastoRealizado = os.calcularGastoRealizado(orcamentoResponse);
                 return Response.status(Response.Status.OK)
