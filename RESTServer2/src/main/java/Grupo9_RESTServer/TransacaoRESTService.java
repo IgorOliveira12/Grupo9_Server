@@ -114,30 +114,19 @@ public class TransacaoRESTService {
 	@Path("/deleteTransacao/{data}")
 	public Response deleteTransacao(@PathParam("data") String data) {
 		boolean transacaoRemoved = ts.removeTransacao(ts.findTransacao(data));
-		System.out.println("a");
 		
 		return Response.status(Response.Status.OK)
 				.entity(transacaoRemoved)
 				.type(MediaType.APPLICATION_JSON)
 				.build();
 	}
-    /**
-     * Altera a categoria de uma transação existente.
-     *
-     * @param descricao      A descrição da transação a ser alterada.
-     * @param novaCategoria  A nova categoria a ser atribuída à transação.
-     * @return Resposta HTTP indicando o resultado da operação.
-     */
+    
     @PUT
     @Path("/alterarCategoria/{descricao}/{novaCategoria}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response alterarCategoria(@PathParam("descricao") String descricao,
-                                     @PathParam("novaCategoria") String novaCategoria) {
+                                        @PathParam("novaCategoria") String novaCategoria) {
         try {
-            Transacao transacao = ts.findTransacao(descricao);
-            Categoria categoria = new Categoria();
-            categoria.setNomeC(novaCategoria);
-            ts.alterarCategoriaTransacao(transacao, categoria);
+            ts.alterarCategoriaTransacao(descricao, novaCategoria);
             return Response.status(Response.Status.OK)
                     .entity("Categoria da transação alterada.")
                     .build();
@@ -158,20 +147,33 @@ public class TransacaoRESTService {
      */
     @PUT
     @Path("/alterarSubcategoria/{descricao}/{novaSubcategoria}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response alterarSubcategoria(@PathParam("descricao") String descricao,
                                         @PathParam("novaSubcategoria") String novaSubcategoria) {
         try {
-            Transacao transacao = ts.findTransacao(descricao);
-            Subcategoria subcategoria = new Subcategoria();
-            subcategoria.setNomeSubc(novaSubcategoria);
-            ts.alterarSubcategoriaTransacao(transacao, subcategoria);
+            ts.alterarSubcategoriaTransacao(descricao, novaSubcategoria);
             return Response.status(Response.Status.OK)
                     .entity("Subcategoria da transação alterada.")
                     .build();
         } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Erro ao alterar a subcategoria da transação: " + e.getMessage())
+                    .type(MediaType.TEXT_PLAIN)
+                    .build();
+        }
+    }
+    
+    @PUT
+    @Path("/alterarData/{descricao}/{novaData}")
+    public Response alterarData(@PathParam("descricao") String descricao,
+                                        @PathParam("novaData") String novaData) {
+        try {
+            ts.alterarDataTransacao(descricao, novaData);
+            return Response.status(Response.Status.OK)
+                    .entity("Data da transacao alterada.")
+                    .build();
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao alterar a data da transacao: " + e.getMessage())
                     .type(MediaType.TEXT_PLAIN)
                     .build();
         }

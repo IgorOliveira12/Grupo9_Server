@@ -133,14 +133,14 @@ public class MetaRESTService {
      * @return Resposta HTTP indicando o resultado da operação.
      */
     @PUT
-    @Path("/alterarPrazoMeta/{nome}/{novaData}")
+    @Path("/alterarPrazoMeta/{nomeMeta}/{novaData}")
     @Produces(MediaType.TEXT_PLAIN)
     public Response alterarPrazoMeta(
-            @PathParam("nome") String nome, @PathParam("novaData") String novaData) {
+            @PathParam("nomeMeta") String nomeMeta, @PathParam("novaData") String novaData) {
         try {
-            ms.alterarPrazoMeta(nome, novaData);
+            ms.alterarPrazoMeta(nomeMeta, novaData);
             return Response.status(Response.Status.OK)
-                    .entity("Prazo da Meta " + nome + " alterado para: " + novaData)
+                    .entity("Prazo da Meta " + nomeMeta + " alterado!")
                     .build();
         } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
