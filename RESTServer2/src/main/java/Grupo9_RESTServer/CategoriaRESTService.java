@@ -63,7 +63,6 @@ public class CategoriaRESTService {
      */
     @GET
     @Path("/getCategorias")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getCategorias() {
     	List<Categoria> categorias = cs.findAllCategorias();
 
@@ -123,7 +122,6 @@ public class CategoriaRESTService {
      */
     @PUT
     @Path("/alterarGastoMaximo/{nomeCategoria}/{gastoMaximo}")
-    @Produces(MediaType.TEXT_PLAIN)
     public Response alterarGastoMaximoCategoria(
             @PathParam("nomeCategoria") String nomeCategoria, @PathParam("gastoMaximo") Double gastoMaximo) {
         try {

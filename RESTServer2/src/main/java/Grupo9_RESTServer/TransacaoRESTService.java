@@ -37,7 +37,6 @@ public class TransacaoRESTService {
      */
     @GET
     @Path("/getTransacoes")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getTransacoes() {
         try {
             List<Transacao> transacoes = ts.findAllTransacoes();
@@ -60,7 +59,6 @@ public class TransacaoRESTService {
      */
     @GET
     @Path("/getTransacao/{descricao}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getTransacao(@PathParam("descricao") String descricao) {
         try {
             Transacao transacaoResponse = ts.findTransacao(descricao);
@@ -113,9 +111,10 @@ public class TransacaoRESTService {
      * @return Resposta HTTP indicando o resultado da operação.
      */
     @DELETE
-	@Path("/deleteTransacao/{descricao}")
-	public Response deleteTransacao(@PathParam("descricao") String descricao) {
-		boolean transacaoRemoved = ts.removeTransacao(ts.findTransacao(descricao));
+	@Path("/deleteTransacao/{data}")
+	public Response deleteTransacao(@PathParam("data") String data) {
+		boolean transacaoRemoved = ts.removeTransacao(ts.findTransacao(data));
+		System.out.println("a");
 		
 		return Response.status(Response.Status.OK)
 				.entity(transacaoRemoved)
@@ -178,32 +177,4 @@ public class TransacaoRESTService {
         }
     }
 
-    /**
-     * Altera a data de uma transação existente.
-     *
-     * @param descricao A descrição da transação a ser alterada.
-     * @param novaData  A nova data a ser atribuída à transação.
-     * @return Resposta HTTP indicando o resultado da operação.
-     */
-    
-    /**
-    @PUT
-    @Path("/alterarData/{descricao}/{novaData}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response alterarData(@PathParam("descricao") String descricao,
-                                @PathParam("novaData") String novaData) {
-        try {
-            Transacao transacao = transacaoService.findTransacao(descricao);
-            transacaoService.alterarDataTransacao(transacao, novaData);
-            return Response.status(Response.Status.OK)
-                    .entity("Data da transação alterada.")
-                    .build();
-        } catch (RuntimeException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao alterar a data da transação: " + e.getMessage())
-                    .type(MediaType.TEXT_PLAIN)
-                    .build();
-        }
-    }
-    */
 }

@@ -62,7 +62,6 @@ public class OrcamentoRESTService {
      */
     @GET
     @Path("/getOrcamentos")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getOrcamentos() {
         try {
             List<Orcamento> orcamentos = os.findAllOrcamentos();
@@ -85,7 +84,6 @@ public class OrcamentoRESTService {
      */
     @GET
     @Path("/getOrcamento/{dataCriacao}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getOrcamento(@PathParam("valorAnual") String dataCriacao) {
         try {
             Orcamento orcamentoResponse = os.findOrcamento(dataCriacao);
@@ -115,7 +113,6 @@ public class OrcamentoRESTService {
      */
     @PUT
     @Path("/adicionarOuReduzirValorOrcamento/{valorAlteracao}")
-    @Produces(MediaType.TEXT_PLAIN)
     public Response adicionarOuReduzirValorOrcamento(@PathParam("valorAlteracao") double valorAlteracao) {
         try {
             Orcamento orcamentoResponse = os.adicionarOuReduzirValorOrcamento(valorAlteracao);
@@ -137,7 +134,6 @@ public class OrcamentoRESTService {
      */
     @GET
     @Path("/obterUltimoOrcamento")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response obterUltimoOrcamento() {
         try {
             Orcamento orcamentoResponse = os.obterUltimoOrcamento();
@@ -166,7 +162,6 @@ public class OrcamentoRESTService {
      */
     @GET
     @Path("/imprimirHistoricoOrcamentos")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response imprimirHistoricoOrcamentos() {
         try {
             os.imprimirHistoricoOrcamentos();
@@ -189,7 +184,6 @@ public class OrcamentoRESTService {
      */
     @GET
     @Path("/calcularGastoRealizado/{dataCriacao}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response calcularGastoRealizado(@PathParam("valorAnual") String dataCriacao) {
         try {
             Orcamento orcamentoResponse = os.findOrcamento(dataCriacao);
@@ -219,7 +213,6 @@ public class OrcamentoRESTService {
      */
     @GET
     @Path("/mostrarStatusOrcamento")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response mostrarStatusOrcamento() {
         try {
             os.mostrarStatusOrcamento();

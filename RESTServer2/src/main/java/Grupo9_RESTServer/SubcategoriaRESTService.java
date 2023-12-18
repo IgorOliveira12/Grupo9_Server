@@ -35,7 +35,6 @@ public class SubcategoriaRESTService {
      */
     @GET
     @Path("/getSubcategorias")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getSubcategorias() {
     	List<Subcategoria> subcategorias = ss.findAllSubcategorias();
 
@@ -53,7 +52,6 @@ public class SubcategoriaRESTService {
      */
     @GET
     @Path("/getSubcategoria/{nomeSubc}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getSubcategoria(@PathParam("nomeSubc") String nomeSubc) {
         try {
             Subcategoria subcategoriaResponse = ss.findSubcategoria(nomeSubc);
@@ -83,8 +81,7 @@ public class SubcategoriaRESTService {
      */
     @POST
     @Path("/addSubcategoria")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response addSubcategoria(Subcategoria subcategoria, @FormParam("nomeC") String nomeC) {
+    public Response addSubcategoria(Subcategoria subcategoria) {
         Subcategoria subcategoriaResponse = ss.updateSubcategoria(subcategoria.getNomeSubc(), subcategoria.getGastoMaxSubc());
         
         return Response.status(Response.Status.CREATED)
@@ -102,22 +99,27 @@ public class SubcategoriaRESTService {
      * @return Resposta HTTP indicando o resultado da operação.
      */
     @PUT
-    @Path("/alterarGastoMaximo/{nomeSubc}/{gastoMaximo}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response alterarGastoMaximo(@PathParam("nomeSubc") String nomeSubc,
-                                       @PathParam("gastoMaximo") double gastoMaximo) {
+    @Path("/alterarGastoMaximo/{nomeSubcategoria}/{gastoMaximo}")
+    public Response alterarGastoMaximoCategoria(
+            @PathParam("nomeSubcategoria") String nomeSubcategoria, @PathParam("gastoMaximo") Double gastoMaximo) {
         try {
-            ss.alterarGastoMaximoSubCategoria(nomeSubc, gastoMaximo);
+            ss.alterarGastoMaximoSubCategoria(nomeSubcategoria, gastoMaximo);
             return Response.status(Response.Status.OK)
-                    .entity("Gasto máximo da subcategoria alterado.")
+                    .entity("Valor máximo da Categoria " + nomeSubcategoria + " alterado para: " + gastoMaximo)
+                    .build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Erro ao alterar o valor máximo da categoria: " + e.getMessage())
+                    .type(MediaType.TEXT_PLAIN)
                     .build();
         } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao alterar o gasto máximo da subcategoria: " + e.getMessage())
+                    .entity("Erro ao alterar o valor máximo da categoria: " + e.getMessage())
                     .type(MediaType.TEXT_PLAIN)
                     .build();
         }
     }
+
 
     /**
      * Remove uma subcategoria com base no nome.
@@ -145,7 +147,6 @@ public class SubcategoriaRESTService {
      */
     @GET
     @Path("/calcularPercentagemGastos/{nomeSubc}/{gastosCategoria}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response calcularPercentagemGastos(@PathParam("nomeSubc") String nomeSubc,
                                               @PathParam("gastosCategoria") double gastosCategoria) {
         try {
