@@ -41,9 +41,9 @@ public class MetaRESTService {
 	}
     
     @DELETE
-	@Path("/deleteMeta/{nome}")
-	public Response deleteMeta(@PathParam("nome") String nome) {
-		boolean metaRemoved = ms.removeMeta(nome);
+	@Path("/deleteMeta/{nomeMeta}")
+	public Response deleteMeta(@PathParam("nomeMeta") String nomeMeta) {
+		boolean metaRemoved = ms.removeMeta(nomeMeta);
 		
 		return Response.status(Response.Status.OK)
 				.entity(metaRemoved)
@@ -58,9 +58,18 @@ public class MetaRESTService {
      */
     @GET
     @Path("/getMetas")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getMetas() {
     	List<Meta> metas = ms.findAllMetasDoUltimoOrcamento();
+
+		return Response.status(Response.Status.OK)
+				.entity(metas)
+				.type(MediaType.APPLICATION_JSON)
+				.build();
+	}
+    @GET
+    @Path("/getAllMetas")
+    public Response getAllMetas() {
+    	List<Meta> metas = ms.findAllMetas();
 
 		return Response.status(Response.Status.OK)
 				.entity(metas)
@@ -77,7 +86,6 @@ public class MetaRESTService {
      */
     @GET
     @Path("/getMeta/{nome}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getMeta(@PathParam("nome") String nome) {
         try {
         	Meta metaResponse = ms.findMeta(nome);
@@ -109,7 +117,6 @@ public class MetaRESTService {
      */
     @PUT
     @Path("/alterarValorMeta/{nome}/{novoValor}")
-    @Produces(MediaType.TEXT_PLAIN)
     public Response alterarValorMeta(
             @PathParam("nome") String nome, @PathParam("novoValor") Double novoValor) {
         try {
@@ -134,7 +141,6 @@ public class MetaRESTService {
      */
     @PUT
     @Path("/alterarPrazoMeta/{nomeMeta}/{novaData}")
-    @Produces(MediaType.TEXT_PLAIN)
     public Response alterarPrazoMeta(
             @PathParam("nomeMeta") String nomeMeta, @PathParam("novaData") String novaData) {
         try {
@@ -157,7 +163,6 @@ public class MetaRESTService {
      */
     @GET
     @Path("/verificarMetasCumpridas")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response verificarMetasCumpridas() {
         try {
             String resultado = ms.obterMetasCumpridas();
@@ -179,7 +184,6 @@ public class MetaRESTService {
      */
     @GET
     @Path("/listarMetasNaoCumpridas")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response listarMetasNaoCumpridas() {
         try {
             String resultadoJson = ms.obterMetasNaoCumpridas();

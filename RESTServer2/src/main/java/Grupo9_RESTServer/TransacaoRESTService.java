@@ -47,6 +47,22 @@ public class TransacaoRESTService {
                     .build();
         }
     }
+    
+    @GET
+    @Path("/getAllTransacoes")
+    public Response getAllTransacoes() {
+        try {
+            List<Transacao> transacoes = ts.findAllTransacoes();
+            return Response.status(Response.Status.OK)
+                    .entity(transacoes)
+                    .build();
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao obter as transações: " + e.getMessage())
+                    .type(MediaType.TEXT_PLAIN)
+                    .build();
+        }
+    }
 
     /**
      * Obtém uma transação com base na descrição.
@@ -180,11 +196,11 @@ public class TransacaoRESTService {
     @Path("/atribuirTransacaoEmCategoria/{nomeCategoria}/{descricao}")
     public Response atribuirTransacaoEmCategoria(
             @PathParam("nomeCategoria") String nomeCategoria,
-            @PathParam("descricao") String descricao) {
+            @PathParam("descricao")String descricao) {
         try {
         	CategoriaService cs = new CategoriaService();
-            Categoria categoria = cs.findCategoria(replaceS(nomeCategoria));
-            Transacao transacao = ts.findTransacao(replaceS(descricao));
+            Categoria categoria = cs.findCategoria(nomeCategoria);
+            Transacao transacao = ts.findTransacao(descricao);
             if (categoria != null && transacao != null) {
                 ts.atribuirTransacaoEmCategoria(transacao, categoria);
                 return Response.status(Response.Status.OK)

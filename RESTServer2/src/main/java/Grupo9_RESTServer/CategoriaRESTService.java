@@ -72,6 +72,17 @@ public class CategoriaRESTService {
 				.build();
 	}
     
+    @GET
+    @Path("/getAllCategorias")
+    public Response getAllCategorias() {
+    	List<Categoria> categorias = cs.findAllCategorias();
+
+		return Response.status(Response.Status.OK)
+				.entity(categorias)
+				.type(MediaType.APPLICATION_JSON)
+				.build();
+	}
+    
 
     /**
      * Obtém uma categoria com base no nome.
