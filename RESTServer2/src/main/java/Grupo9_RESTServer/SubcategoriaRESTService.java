@@ -34,7 +34,7 @@ public class SubcategoriaRESTService {
     @GET
     @Path("/getSubcategorias")
     public Response getSubcategorias() {
-    	List<Subcategoria> subcategorias = ss.findAllSubcategorias();
+    	List<Subcategoria> subcategorias = ss.findAllSubcategoriasDoUltimoOrcamento();
 
 		return Response.status(Response.Status.OK)
 				.entity(subcategorias)

@@ -41,7 +41,7 @@ public class OrcamentoRESTService {
 				.build();
 	}
     
-    /**
+    /** não é necessário!
     @DELETE
 	@Path("/deleteCategoria/{nomeC}")
 	public Response deleteCategoria(@PathParam("nomeC") String nomeC) {
@@ -83,27 +83,15 @@ public class OrcamentoRESTService {
      * @return Resposta HTTP contendo o orçamento encontrado ou uma mensagem de erro.
      */
     @GET
-    @Path("/getOrcamento/{dataCriacao}")
-    public Response getOrcamento(@PathParam("valorAnual") String dataCriacao) {
-        try {
-            Orcamento orcamentoResponse = os.findOrcamento(dataCriacao);
-            if (orcamentoResponse != null) {
-                return Response.status(Response.Status.OK)
-                        .entity(orcamentoResponse)
-                        .build();
-            } else {
-                return Response.status(Response.Status.NOT_FOUND)
-                        .entity("Orçamento não encontrado.")
-                        .type(MediaType.TEXT_PLAIN)
-                        .build();
-            }
-        } catch (RuntimeException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao obter o orçamento: " + e.getMessage())
-                    .type(MediaType.TEXT_PLAIN)
-                    .build();
-        }
-    }
+    @Path("/getOrcamento/{data}")
+    public Response getCategoria(@PathParam("data") String data) {
+		Orcamento orcamentoResponse = os.findOrcamento(replaceDate(data));
+		
+		return Response.status(Response.Status.OK)
+				.entity(orcamentoResponse)
+				.type(MediaType.APPLICATION_JSON)
+				.build();
+	}
 
     /**
      * Adiciona ou reduz o valor de um orçamento.
@@ -225,5 +213,9 @@ public class OrcamentoRESTService {
                     .type(MediaType.TEXT_PLAIN)
                     .build();
         }
+    }
+    
+    public static String replaceDate(String input) {
+    	return input.replaceAll("_", "/");
     }
 }

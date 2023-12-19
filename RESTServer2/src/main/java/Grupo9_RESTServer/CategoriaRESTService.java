@@ -64,7 +64,7 @@ public class CategoriaRESTService {
     @GET
     @Path("/getCategorias")
     public Response getCategorias() {
-    	List<Categoria> categorias = cs.findAllCategorias();
+    	List<Categoria> categorias = cs.findAllCategoriasDoUltimoOrcamento();
 
 		return Response.status(Response.Status.OK)
 				.entity(categorias)

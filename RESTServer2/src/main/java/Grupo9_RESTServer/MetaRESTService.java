@@ -60,7 +60,7 @@ public class MetaRESTService {
     @Path("/getMetas")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMetas() {
-    	List<Meta> metas = ms.findAllMetas();
+    	List<Meta> metas = ms.findAllMetasDoUltimoOrcamento();
 
 		return Response.status(Response.Status.OK)
 				.entity(metas)

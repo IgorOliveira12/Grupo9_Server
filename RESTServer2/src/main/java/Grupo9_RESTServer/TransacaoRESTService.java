@@ -36,7 +36,7 @@ public class TransacaoRESTService {
     @Path("/getTransacoes")
     public Response getTransacoes() {
         try {
-            List<Transacao> transacoes = ts.findAllTransacoes();
+            List<Transacao> transacoes = ts.findAllTransacoesDoUltimoOrcamento();
             return Response.status(Response.Status.OK)
                     .entity(transacoes)
                     .build();
@@ -180,7 +180,7 @@ public class TransacaoRESTService {
     @Path("/atribuirTransacaoEmCategoria/{nomeCategoria}/{descricao}")
     public Response atribuirTransacaoEmCategoria(
             @PathParam("nomeCategoria") String nomeCategoria,
-            @PathParam("descricao")String descricao) {
+            @PathParam("descricao") String descricao) {
         try {
         	CategoriaService cs = new CategoriaService();
             Categoria categoria = cs.findCategoria(replaceS(nomeCategoria));
@@ -211,8 +211,8 @@ public class TransacaoRESTService {
             @PathParam("descricao") String descricao) {
         try {
         	SubcategoriaService ss = new SubcategoriaService();
-            Subcategoria subcategoria = ss.findSubcategoria(replaceS(nomeSubcategoria));
-            Transacao transacao = ts.findTransacao(replaceS(descricao));
+            Subcategoria subcategoria = ss.findSubcategoria(nomeSubcategoria);
+            Transacao transacao = ts.findTransacao(descricao);
             if (subcategoria != null && transacao != null) {
                 ts.atribuirTransacaoEmSubcategoria(transacao, subcategoria);
                 return Response.status(Response.Status.OK)
@@ -239,8 +239,8 @@ public class TransacaoRESTService {
             @PathParam("descricao")String descricao) {
         try {
         	MetaService ms = new MetaService();
-        	Meta meta = ms.findMeta(replaceS(nomeMeta));
-            Transacao transacao = ts.findTransacao(replaceS(descricao));
+        	Meta meta = ms.findMeta(nomeMeta);
+            Transacao transacao = ts.findTransacao(descricao);
             if (meta != null && transacao != null) {
                 ts.atribuirTransacaoEmMeta(transacao, meta);
                 return Response.status(Response.Status.OK)
