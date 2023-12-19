@@ -101,9 +101,9 @@ public class CategoriaRESTService {
     @Produces(MediaType.TEXT_PLAIN)
     public Response visualizarPercentagemGastosPorCategoriaNoOrcamento() {
         try {
-            cs.visualizarPercentagemGastosPorCategoriaNoOrcamento();
+            String resultado = cs.obterPercentagemGastosPorCategoriaNoOrcamento();
             return Response.status(Response.Status.OK)
-                    .entity("Percentagem de gastos por categoria no último orçamento visualizada.")
+                    .entity(resultado)
                     .build();
         } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)

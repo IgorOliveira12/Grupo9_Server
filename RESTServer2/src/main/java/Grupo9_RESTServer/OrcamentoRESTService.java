@@ -162,15 +162,15 @@ public class OrcamentoRESTService {
      */
     @GET
     @Path("/imprimirHistoricoOrcamentos")
-    public Response imprimirHistoricoOrcamentos() {
+    public Response obterHistoricoOrcamentos() {
         try {
-            os.imprimirHistoricoOrcamentos();
+            String historico = os.obterHistoricoOrcamentos();
             return Response.status(Response.Status.OK)
-                    .entity("Histórico de orçamentos impresso.")
+                    .entity(historico)
                     .build();
-        } catch (RuntimeException e) {
+        } catch (OrcamentoException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erro ao imprimir o histórico de orçamentos: " + e.getMessage())
+                    .entity("Erro ao obter o histórico de orçamentos: " + e.getMessage())
                     .type(MediaType.TEXT_PLAIN)
                     .build();
         }
@@ -215,9 +215,9 @@ public class OrcamentoRESTService {
     @Path("/mostrarStatusOrcamento")
     public Response mostrarStatusOrcamento() {
         try {
-            os.mostrarStatusOrcamento();
+            String statusOrcamento = os.obterStatusOrcamento();
             return Response.status(Response.Status.OK)
-                    .entity("Status do orçamento mostrado.")
+                    .entity(statusOrcamento)
                     .build();
         } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)

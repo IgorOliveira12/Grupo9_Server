@@ -1,9 +1,6 @@
 package Grupo9_RESTServer;
 
-import grupo9_FinancasPessoais.Categoria;
-import grupo9_FinancasPessoais.Subcategoria;
-import grupo9_FinancasPessoais.Transacao;
-import grupo9_FinancasPessoais.TransacaoService;
+import grupo9_FinancasPessoais.*;
 
 import javax.persistence.EntityManager;
 import javax.ws.rs.*;
@@ -178,5 +175,93 @@ public class TransacaoRESTService {
                     .build();
         }
     }
+    
+    @PUT
+    @Path("/atribuirTransacaoEmCategoria/{nomeCategoria}/{descricao}")
+    public Response atribuirTransacaoEmCategoria(
+            @PathParam("nomeCategoria") String nomeCategoria,
+            @PathParam("descricao")String descricao) {
+        try {
+        	CategoriaService cs = new CategoriaService();
+            Categoria categoria = cs.findCategoria(replaceS(nomeCategoria));
+            Transacao transacao = ts.findTransacao(replaceS(descricao));
+            if (categoria != null && transacao != null) {
+                ts.atribuirTransacaoEmCategoria(transacao, categoria);
+                return Response.status(Response.Status.OK)
+                        .entity("Transação atribuída com sucesso à categoria.")
+                        .build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("Categoria não encontrada.")
+                        .type(MediaType.TEXT_PLAIN)
+                        .build();
+            }
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao atribuir transação à categoria: " + e.getMessage())
+                    .type(MediaType.TEXT_PLAIN)
+                    .build();
+        }
+    }
 
+    @PUT
+    @Path("/atribuirTransacaoEmSubcategoria/{nomeSubcategoria}/{descricao}")
+    public Response atribuirTransacaoEmSubcategoria(
+            @PathParam("nomeSubcategoria") String nomeSubcategoria,
+            @PathParam("descricao") String descricao) {
+        try {
+        	SubcategoriaService ss = new SubcategoriaService();
+            Subcategoria subcategoria = ss.findSubcategoria(replaceS(nomeSubcategoria));
+            Transacao transacao = ts.findTransacao(replaceS(descricao));
+            if (subcategoria != null && transacao != null) {
+                ts.atribuirTransacaoEmSubcategoria(transacao, subcategoria);
+                return Response.status(Response.Status.OK)
+                        .entity("Transação atribuída com sucesso à subcategoria.")
+                        .build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("Subcategoria/transacao não encontrada.")
+                        .type(MediaType.TEXT_PLAIN)
+                        .build();
+            }
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao atribuir transação à subcategoria: " + e.getMessage())
+                    .type(MediaType.TEXT_PLAIN)
+                    .build();
+        }
+    }
+    
+    @PUT
+    @Path("/atribuirTransacaoEmMeta/{nomeMeta}/{descricao}")
+    public Response atribuirTransacaoEmMeta(
+            @PathParam("nomeMeta") String nomeMeta,
+            @PathParam("descricao")String descricao) {
+        try {
+        	MetaService ms = new MetaService();
+        	Meta meta = ms.findMeta(replaceS(nomeMeta));
+            Transacao transacao = ts.findTransacao(replaceS(descricao));
+            if (meta != null && transacao != null) {
+                ts.atribuirTransacaoEmMeta(transacao, meta);
+                return Response.status(Response.Status.OK)
+                        .entity("Transação atribuída com sucesso à categoria.")
+                        .build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("Categoria não encontrada.")
+                        .type(MediaType.TEXT_PLAIN)
+                        .build();
+            }
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao atribuir transação à categoria: " + e.getMessage())
+                    .type(MediaType.TEXT_PLAIN)
+                    .build();
+        }
+    }
+
+    public static String replaceS(String input) {
+        return input.replaceAll("_", " ");
+    }
+    
 }

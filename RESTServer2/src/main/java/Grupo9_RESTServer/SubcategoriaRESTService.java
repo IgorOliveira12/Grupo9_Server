@@ -1,8 +1,6 @@
 package Grupo9_RESTServer;
 
-import grupo9_FinancasPessoais.Categoria;
-import grupo9_FinancasPessoais.Subcategoria;
-import grupo9_FinancasPessoais.SubcategoriaService;
+import grupo9_FinancasPessoais.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -170,4 +168,36 @@ public class SubcategoriaRESTService {
                     .build();
         }
     }
+    
+    @PUT
+    @Path("/atribuirCategoriaNaSubcategoria/{nomeC}/{nomeSubc}")
+    public Response atribuirCategoriaNaSubcategoria(@PathParam("nomeC") String nomeC,
+                                              @PathParam("nomeSubc") String nomeSubc) {
+        try {
+        	CategoriaService cs = new CategoriaService();
+        	Categoria categoriaResponse = cs.findCategoria(nomeC);
+            Subcategoria subcategoriaResponse = ss.findSubcategoria(nomeSubc);
+            if (categoriaResponse != null && subcategoriaResponse != null) {
+                ss.atribuirCategoriaNaSubcategoria(categoriaResponse, subcategoriaResponse);
+                return Response.status(Response.Status.OK)
+                        .entity("Categoria atribuída com sucesso à subcategoria.")
+                        .build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("Categoria ou subcategoria não encontrada.")
+                        .type(MediaType.TEXT_PLAIN)
+                        .build();
+            }
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao calcular a percentagem de gastos: " + e.getMessage())
+                    .type(MediaType.TEXT_PLAIN)
+                    .build();
+        }
+    }
+    
+    public static String replaceS(String input) {
+        return input.replaceAll("_", " ");
+    }
+    
 }

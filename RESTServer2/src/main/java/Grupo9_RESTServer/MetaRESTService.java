@@ -160,9 +160,9 @@ public class MetaRESTService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response verificarMetasCumpridas() {
         try {
-            ms.verificarMetasCumpridas();
+            String resultado = ms.obterMetasCumpridas();
             return Response.status(Response.Status.OK)
-                    .entity("Metas cumpridas verificadas.")
+                    .entity(resultado)
                     .build();
         } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -182,9 +182,9 @@ public class MetaRESTService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response listarMetasNaoCumpridas() {
         try {
-            ms.listarMetasNaoCumpridas();
+            String resultadoJson = ms.obterMetasNaoCumpridas();
             return Response.status(Response.Status.OK)
-                    .entity("Metas não cumpridas listadas.")
+                    .entity(resultadoJson)
                     .build();
         } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
