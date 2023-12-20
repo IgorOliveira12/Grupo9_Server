@@ -85,7 +85,7 @@ public class OrcamentoRESTService {
     @GET
     @Path("/getOrcamento/{data}")
     public Response getCategoria(@PathParam("data") String data) {
-		Orcamento orcamentoResponse = os.findOrcamento(replaceDate(data));
+		Orcamento orcamentoResponse = os.findOrcamento(data);
 		
 		return Response.status(Response.Status.OK)
 				.entity(orcamentoResponse)
@@ -215,7 +215,4 @@ public class OrcamentoRESTService {
         }
     }
     
-    public static String replaceDate(String input) {
-    	return input.replaceAll("_", "/");
-    }
 }
